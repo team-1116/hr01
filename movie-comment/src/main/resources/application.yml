@@ -1,0 +1,26 @@
+
+server:
+  port: 8084
+
+spring:
+  application:
+    name: movie-comment
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/cinema?characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+
+mybatis:
+  type-aliases-package: cn.kgc.movie.common.pojo
+
+logging:
+  level:
+    cn.kgc.movie.service.mapper: debug
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8000/eureka
+
+

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.kgc.movie.service.mapper.FilmMapper">
+    <select id="selectFlimByPidAndReleaseDate" resultMap="FilmMap">
+        SELECT f.*,p.s_id,p.projection_id FROM film f
+        INNER JOIN projectionroom p
+        on p.film_id=f.fid
+        Inner JOIN store s
+        on p.s_id=s.id
+        <where>
+            p.s_id=#{sid}
+            <if test="pid!=null and pid !='' and pid != 0">
+                and p.projection_id=#{pid}
+            </if>
+            <if test="releaseDate!= null and releaseDate !='1997-05-07'">
+                and date(f.release_date)=#{releaseDate}
+            </if>
+        </where>
+        ORDER BY f.fid
+    </select>
+
+    <select id="selectFlimByFid" resultMap="FilmByIdMAP">
+        SELECT f.*,t.type_name FROM film f
+        INNER JOIN middleware m
+        on f.fid=m.film_id
+        INNER JOIN filmtypes t
+        on m.types_id=t.id
+        WHERE f.fid=#{fid}
+    </select>
+
+
+    <resultMap id="FilmByIdMAP" type="Film">
+        <id property="fid" column="fid"/>
+        <result property="filmName" column="film_name"/>
+        <result property="actorName" column="actor_name"/>
+        <result property="filmDistributionCorporation" column="film_distribution_corporation"/>
+        <result property="releaseDate" column="release_date"/>
+        <result property="actionStill" column="action_still"/>
+        <result property="synopsis" column="synopsis"/>
+        <result property="filmPrice" column="film_price"/>
+        <collection property="filmTypes" ofType="FilmTypes">
+            <id property="id" column="id"/>
+            <result property="typeName" column="type_name"/>
+        </collection>
+    </resultMap>
+
+    <resultMap id="FilmMap" type="Film">
+        <id property="fid" column="fid"/>
+        <result property="filmName" column="film_name"/>
+        <result property="actorName" column="actor_name"/>
+        <result property="filmDistributionCorporation" column="film_distribution_corporation"/>
+        <result property="releaseDate" column="release_date"/>
+        <result property="actionStill" column="action_still"/>
+        <result property="synopsis" column="synopsis"/>
+        <result property="filmPrice" column="film_price"/>
+        <association property="projectionRoom" javaType="ProjectionRoom">
+            <result property="projectionId" column="projection_id"/>
+            <result property="filmId" column="film_id"/>
+            <result property="sId" column="s_id"/>
+        </association>
+    </resultMap>
+</mapper>

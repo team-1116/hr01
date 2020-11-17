@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.kgc.movice.order.mapper.OrderMapper">
+            <select id="selectOrderByUserID" resultMap="OrderMap">
+                SELECT o.*,f.film_name,s.store_name FROM `order` o
+                INNER JOIN film f
+                on o.movie_id=f.fid
+                INNER JOIN store s
+                 on o.store_id=s.id
+                where o.user_id=#{userId}
+            </select>
+
+    <resultMap id="OrderMap" type="Order">
+        <id property="orderId" column="order_id"/>
+        <result property="movieId" column="movie_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="seatNum" column="seat_num"/>
+        <result property="createDate" column="create_date"/>
+        <result property="storeId" column="store_id"/>
+        <result property="projectionId" column="projection_id"/>
+        <association property="store" javaType="Store">
+            <id property="id" column="id"/>
+            <result property="storeName" column="store_name"/>
+        </association>
+        <association property="film" javaType="Film">
+            <id property="fid" column="fid"/>
+            <result property="filmName" column="film_name"/>
+            <result property="releaseDate" column="release_date"/>
+        </association>
+    </resultMap>
+</mapper>

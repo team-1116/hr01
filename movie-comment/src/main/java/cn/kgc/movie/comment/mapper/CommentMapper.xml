@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.kgc.movie.comment.mapper.CommentMapper">
+    <select id="selectCommentByFid" resultMap="CommentMAP">
+        SELECT c.*,u.username,u.phone FROM `comment` c
+        INNER join film f
+        on c.flim_fid=f.fid
+        Inner join `user` u
+        on c.user_id=u.uid
+        WHERE c.flim_fid=#{fid}
+        ORDER BY c.start_time DESC
+    </select>
+
+        <insert id="addComment">
+            INSERT INTO `comment`(details,user_id,flim_fid)
+            VALUES(#{details},#{userId},#{flimFid})
+        </insert>
+
+    <resultMap id="CommentMAP" type="Comment">
+        <id property="id" column="id"/>
+        <result property="details" column="details"/>
+        <result property="userId" column="user_id"/>
+        <result property="flimFid" column="flim_fid"/>
+        <result property="startTime" column="start_time"/>
+        <association property="user" javaType="User">
+            <result property="id" column="id"/>
+            <result property="account" column="account"/>
+            <result property="phone" column="phone"/>
+            <result property="password" column="password"/>
+            <result property="userName" column="username"/>
+        </association>
+    </resultMap>
+</mapper>
